@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Mr Lukashe — 11 September</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #080C18;
+    --deep: #0D1426;
+    --gold: #C8860A;
+    --gold-light: #E8A820;
+    --gold-pale: #F5D98A;
+    --rose: #C4746B;
+    --ivory: #F0EAD6;
+    --ivory-dim: #D4C9A8;
+    --sage: #7A9E7E;
+    --sage-dim: #4A6E4E;
+    --text: #EDE0C4;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: 'EB Garamond', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ── LOADING SCREEN ── */
+  #loader {
+    position: fixed; inset: 0;
+    background: var(--navy);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 9999;
+    transition: opacity 1.2s ease, visibility 1.2s ease;
+  }
+  #loader.gone { opacity: 0; visibility: hidden; }
+  #loader img {
+    width: 160px; height: 160px;
+    object-fit: contain;
+    animation: catBounce 1.2s ease-in-out infinite;
+    filter: drop-shadow(0 0 24px rgba(200,134,10,0.5));
+  }
+  #loader p {
+    margin-top: 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--gold-pale);
+    letter-spacing: 0.12em;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes catBounce {
+    0%,100% { transform: translateY(0) rotate(-3deg); }
+    50%      { transform: translateY(-14px) rotate(3deg); }
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 0.4; }
+    50%      { opacity: 1; }
+  }
+
+  /* ── CANVAS / SNOW ── */
+  #snowCanvas {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── STARS ── */
+  .star-field {
+    position: fixed; inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--d, 3s) ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: var(--lo, 0.1); transform: scale(1); }
+    50%      { opacity: var(--hi, 0.9); transform: scale(1.3); }
+  }
+
+  /* ── AURORA behind content ── */
+  .aurora {
+    position: fixed;
+    width: 80vw; height: 50vh;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 14s ease-in-out infinite alternate;
+  }
+  .aurora-1 { top: -10vh; left: -20vw; background: rgba(200,134,10,0.08); }
+  .aurora-2 { bottom: -10vh; right: -20vw; background: rgba(122,158,126,0.06); animation-delay: -7s; }
+  @keyframes drift { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(4vw,3vh) scale(1.08); } }
+
+  /* ── PAGE LAYOUT ── */
+  #page { position: relative; z-index: 2; }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    padding: 6rem 2rem 2rem;
+  }
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 1.2rem;
+  }
+  .name-display {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.6rem, 8vw, 5.5rem);
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1.05;
+    color: var(--ivory);
+    text-shadow: 0 0 60px rgba(200,134,10,0.35), 0 4px 32px rgba(0,0,0,0.6);
+    animation: fadeSlideUp 1.4s 0.3s both;
+  }
+  .subtitle {
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    color: var(--ivory-dim);
+    font-style: italic;
+    line-height: 1.6;
+    animation: fadeSlideUp 1.4s 0.6s both;
+  }
+  .nephew-tag {
+    margin-top: 0.6rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    opacity: 0.6;
+    animation: fadeSlideUp 1.4s 0.9s both;
+  }
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── DIVIDER ── */
+  .ornament {
+    display: flex; align-items: center; gap: 1rem;
+    justify-content: center;
+    margin: 2.5rem auto;
+    max-width: 320px;
+    color: var(--gold);
+    opacity: 0.4;
+  }
+  .ornament::before, .ornament::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .ornament-glyph { font-size: 1rem; }
+
+  /* ── RECORD PLAYER SECTION ── */
+  #record-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1rem 2rem;
+  }
+
+  .record-wrap {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.3s ease;
+  }
+  .record-wrap:hover { transform: scale(1.04); }
+
+  .vinyl {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 50%, #2a1a00 0%, #1a1100 12%,
+        transparent 12.5%, transparent 15%, rgba(200,134,10,0.12) 15.5%,
+        transparent 16%, transparent 20%, rgba(200,134,10,0.07) 20.5%,
+        transparent 21%, transparent 26%, rgba(200,134,10,0.07) 26.5%,
+        transparent 27%, transparent 32%, rgba(200,134,10,0.06) 32.5%,
+        transparent 33%, transparent 39%, rgba(200,134,10,0.05) 39.5%,
+        transparent 40%, #111 40%, #0a0a0a 100%);
+    box-shadow:
+      0 0 0 4px rgba(200,134,10,0.18),
+      0 0 40px rgba(0,0,0,0.8),
+      0 0 80px rgba(200,134,10,0.08),
+      inset 0 2px 6px rgba(255,255,255,0.04);
+    animation: spin 4s linear infinite paused;
+    position: relative;
+  }
+  .vinyl.playing { animation-play-state: running; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .vinyl-label {
+    position: absolute;
+    inset: 0; margin: auto;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--gold) 0%, #8a5500 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.42rem;
+    color: var(--navy);
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.3;
+    letter-spacing: 0.05em;
+    box-shadow: 0 0 12px rgba(200,134,10,0.4);
+    animation: counter-spin 4s linear infinite paused;
+  }
+  .vinyl.playing + .vinyl-label,
+  .vinyl.playing ~ .vinyl-label { animation-play-state: running; }
+  @keyframes counter-spin { to { transform: rotate(-360deg); } }
+
+  .record-hint {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    opacity: 0.5;
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  /* ── NOW PLAYING PILL ── */
+  #now-playing {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(200,134,10,0.1);
+    border: 1px solid rgba(200,134,10,0.25);
+    border-radius: 100px;
+    padding: 0.55rem 1.1rem 0.55rem 0.75rem;
+    max-width: min(420px, 90vw);
+    width: 100%;
+    margin-top: 1.5rem;
+    backdrop-filter: blur(12px);
+    transition: all 0.5s ease;
+    overflow: hidden;
+  }
+  #now-playing.hidden { opacity: 0; transform: translateY(10px); pointer-events: none; }
+
+  .pill-icon {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #8a5500);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 12px rgba(200,134,10,0.4);
+  }
+  .pill-icon svg { width: 16px; height: 16px; fill: var(--navy); }
+
+  .pill-info { flex: 1; min-width: 0; }
+  .pill-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    opacity: 0.6;
+    display: block;
+  }
+  .pill-track {
+    font-size: 0.85rem;
+    color: var(--ivory);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    margin-top: 1px;
+  }
+
+  .pill-bars {
+    display: flex; align-items: flex-end;
+    gap: 2px; height: 18px;
+    flex-shrink: 0;
+  }
+  .pill-bars span {
+    display: block;
+    width: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: bar-bounce 0.7s ease-in-out infinite alternate;
+    opacity: 0.7;
+  }
+  .pill-bars span:nth-child(1) { height: 6px;  animation-delay: 0s;   }
+  .pill-bars span:nth-child(2) { height: 14px; animation-delay: 0.15s; }
+  .pill-bars span:nth-child(3) { height: 9px;  animation-delay: 0.3s;  }
+  .pill-bars span:nth-child(4) { height: 16px; animation-delay: 0.1s;  }
+  @keyframes bar-bounce {
+    from { transform: scaleY(0.3); opacity: 0.4; }
+    to   { transform: scaleY(1);   opacity: 1; }
+  }
+  #now-playing.paused .pill-bars span { animation-play-state: paused; }
+
+  /* ── VIEW SECTIONS ── */
+  .content-section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ── VIEW SWITCHER ── */
+  .view-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 3rem auto 0;
+    padding: 0.3rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 100px;
+    width: fit-content;
+    border: 1px solid rgba(200,134,10,0.12);
+  }
+  .view-tab {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    padding: 0.55rem 1.2rem;
+    border-radius: 100px;
+    border: none;
+    background: transparent;
+    color: var(--ivory-dim);
+    cursor: pointer;
+    transition: all 0.35s ease;
+    opacity: 0.5;
+  }
+  .view-tab.active {
+    background: rgba(200,134,10,0.18);
+    color: var(--gold-pale);
+    opacity: 1;
+    box-shadow: 0 0 16px rgba(200,134,10,0.15);
+  }
+
+  /* ── VIEWS ── */
+  .view { display: none; padding: 2.5rem 0 4rem; }
+  .view.active { display: block; animation: viewIn 0.6s ease both; }
+  @keyframes viewIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── LETTER VIEW ── */
+  .letter-paper {
+    background: rgba(240,234,214,0.04);
+    border: 1px solid rgba(200,134,10,0.15);
+    border-radius: 4px;
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .letter-paper::before {
+    content: '';
+    position: absolute;
+    left: 3.5rem;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: rgba(200,134,10,0.08);
+  }
+  .letter-greeting {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-style: italic;
+    color: var(--gold-pale);
+    margin-bottom: 1.8rem;
+  }
+  .letter-body p {
+    font-size: 1.08rem;
+    line-height: 1.85;
+    color: var(--ivory-dim);
+    margin-bottom: 1.4rem;
+    max-width: 58ch;
+  }
+  .letter-body p strong {
+    color: var(--ivory);
+    font-weight: 500;
+  }
+  .letter-pull {
+    margin: 2rem 0;
+    padding: 1.5rem 2rem;
+    border-left: 3px solid var(--gold);
+    background: rgba(200,134,10,0.05);
+    border-radius: 0 4px 4px 0;
+  }
+  .letter-pull p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--gold-pale);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .letter-sign {
+    margin-top: 2.5rem;
+    font-style: italic;
+    color: var(--ivory-dim);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  .letter-sign strong {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--gold-pale);
+    font-style: italic;
+    margin-top: 0.5rem;
+  }
+
+  /* ── BLESSINGS VIEW ── */
+  .blessings-grid {
+    display: grid;
+    gap: 1.8rem;
+  }
+  .verse-card {
+    background: rgba(122,158,126,0.06);
+    border: 1px solid rgba(122,158,126,0.15);
+    border-radius: 8px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .verse-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 24px rgba(122,158,126,0.08);
+  }
+  .verse-card::after {
+    content: '"';
+    position: absolute;
+    top: -0.5rem; right: 1rem;
+    font-size: 6rem;
+    font-family: 'Playfair Display', serif;
+    color: rgba(200,134,10,0.07);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .verse-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.12rem;
+    font-style: italic;
+    line-height: 1.75;
+    color: var(--ivory);
+    margin-bottom: 0.8rem;
+  }
+  .verse-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--sage);
+    opacity: 0.7;
+  }
+
+  .blessings-note {
+    margin-top: 2.5rem;
+    text-align: center;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--ivory-dim);
+    line-height: 1.8;
+  }
+  .blessings-note .highlight {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--gold-pale);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── IMAGERY NOTE ── */
+  .imagery-band {
+    text-align: center;
+    padding: 1.5rem 2rem;
+    background: rgba(200,134,10,0.04);
+    border-top: 1px solid rgba(200,134,10,0.1);
+    border-bottom: 1px solid rgba(200,134,10,0.1);
+    margin: 1rem 0;
+  }
+  .imagery-band p {
+    font-size: 0.88rem;
+    font-style: italic;
+    color: var(--ivory-dim);
+    opacity: 0.6;
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem 5rem;
+    position: relative;
+    z-index: 2;
+  }
+  footer p {
+    font-size: 0.75rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    opacity: 0.25;
+  }
+
+  /* ── AUDIO (hidden) ── */
+  audio { display: none; }
+
+  /* ── SCROLL TRIGGER VISUAL ── */
+  .scroll-glow {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    border-radius: 1px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: 3;
+    pointer-events: none;
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%,100% { opacity: 0; transform: translateX(-50%) scaleY(0.5); }
+    50%      { opacity: 0.4; transform: translateX(-50%) scaleY(1); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 500px) {
+    .letter-paper { padding: 2rem 1.5rem; }
+    .verse-card   { padding: 1.5rem; }
+    .name-display { font-size: clamp(2rem, 10vw, 3.5rem); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001s !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <img src="images/Cat Art Sticker.gif" alt="Loading…" id="loader-img" onerror="this.style.fontSize='4rem';this.outerHTML='<div style=\'font-size:4rem\'>🐱</div>'">
+  <p>Preparing something beautiful…</p>
+</div>
+
+<!-- STARS -->
+<div class="star-field" id="starField"></div>
+<div class="aurora aurora-1"></div>
+<div class="aurora aurora-2"></div>
+
+<!-- SNOW CANVAS -->
+<canvas id="snowCanvas"></canvas>
+
+<!-- SCROLL GLOW -->
+<div class="scroll-glow"></div>
+
+<!-- AUDIO -->
+<audio id="player" preload="none"></audio>
+
+<!-- PAGE -->
+<div id="page">
+
+  <header>
+    <p class="date-line">11 · September · 2026</p>
+    <h1 class="name-display">Mr Lukashe</h1>
+    <p class="subtitle">
+      Mechanic. Uncle. The man who taught me<br>that nothing is beyond repair.
+    </p>
+    <p class="nephew-tag">From your nephew, Ayolela — Ozzie</p>
+  </header>
+
+  <!-- RECORD PLAYER -->
+  <div id="record-section">
+    <div class="ornament"><span class="ornament-glyph">✦</span></div>
+
+    <div class="record-wrap" id="recordBtn" role="button" aria-label="Tap to open message / close message" tabindex="0">
+      <div class="vinyl" id="vinyl">
+        <div class="vinyl-label" id="vinylLabel">
+          Happy<br>Birthday<br>Malume
+        </div>
+      </div>
+    </div>
+
+    <p class="record-hint">tap the record</p>
+
+    <!-- NOW PLAYING PILL -->
+    <div id="now-playing" class="hidden">
+      <div class="pill-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/>
+        </svg>
+      </div>
+      <div class="pill-info">
+        <span class="pill-label">NOW PLAYING</span>
+        <span class="pill-track" id="trackName">—</span>
+      </div>
+      <div class="pill-bars">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT: view tabs + views, hidden until record tapped -->
+  <div class="content-section" id="mainContent" style="opacity:0;max-height:0;overflow:hidden;transition:all 0.9s cubic-bezier(0.4,0,0.2,1);">
+
+    <div class="view-tabs">
+      <button class="view-tab active" data-view="letter">The Letter</button>
+      <button class="view-tab" data-view="blessings">Blessings</button>
+    </div>
+
+    <!-- LETTER -->
+    <div class="view active" id="view-letter">
+      <div class="letter-paper">
+        <p class="letter-greeting">Dear Malume Lukashe,</p>
+        <div class="letter-body">
+          <p>Malume, today the whole calendar bows a little. <strong>The eleventh of September belongs to you.</strong></p>
+          <p>You have spent your life with your hands inside the engines of other people's lives. Cars that coughed and gave up on the side of the road came to you, and you sent them home running. That is not a small thing. That is a man who fixes what the world has written off.</p>
+          <p>I want you to know that I saw it. I saw the early mornings and the oil that never fully washed off. I saw you carry a family, a name and a whole community on shoulders that never once asked for applause. You worked so that people like me could stand where we stand.</p>
+
+          <div class="letter-pull">
+            <p>I am the man I am today because of you. Every bit of discipline I have, every time I refuse to quit halfway, every time I look at a problem and think <em>there is a way through this</em> — that is your voice in me.</p>
+          </div>
+
+          <p>You are the reason I could reach where I am. I will forever be grateful to be your nephew. Truly, forever.</p>
+          <p>I hope you and Auntie are well and being good to each other, the way you always have been. May the two of you enjoy this day slowly, with good food, good music and no one calling about a broken gearbox.</p>
+          <p>Happy birthday, Mr Lukashe. <strong>May God stretch your years, keep your hands steady, your heart light and your home full.</strong> All the best, always.</p>
+        </div>
+
+        <div class="imagery-band">
+          <p>Hands that fixed everything they touched</p>
+        </div>
+
+        <div class="letter-pull" style="margin-top:1.5rem;">
+          <p>"You are supposed to reach where I am, as a man." You said it — and then you built the road there with your own two hands.</p>
+        </div>
+
+        <div class="letter-sign">
+          With all my love —
+          <strong>Ayolela (Ozzie)</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLESSINGS -->
+    <div class="view" id="view-blessings">
+      <div class="blessings-grid">
+
+        <div class="verse-card">
+          <p class="verse-text">Honour your father and your mother, so that you may live long in the land the Lord your God is giving you.</p>
+          <p class="verse-ref">Exodus 20:12</p>
+        </div>
+
+        <div class="verse-card">
+          <p class="verse-text">The Lord bless you and keep you; the Lord make his face shine on you and be gracious to you; the Lord turn his face toward you and give you peace.</p>
+          <p class="verse-ref">Numbers 6:24–26</p>
+        </div>
+
+        <div class="verse-card">
+          <p class="verse-text">For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.</p>
+          <p class="verse-ref">Jeremiah 29:11</p>
+        </div>
+
+        <div class="verse-card">
+          <p class="verse-text">He who began a good work in you will carry it on to completion until the day of Christ Jesus.</p>
+          <p class="verse-ref">Philippians 1:6</p>
+        </div>
+
+        <div class="verse-card">
+          <p class="verse-text">The Lord is my shepherd, I lack nothing. He makes me lie down in green pastures, he leads me beside quiet waters, he refreshes my soul.</p>
+          <p class="verse-ref">Psalm 23:1–3</p>
+        </div>
+
+      </div>
+
+      <div class="blessings-note">
+        <span class="highlight">Happy Birthday, Malume.</span>
+        May every year ahead be full of the grace you have given so freely to everyone around you. May your home always smell like food cooking and your driveway always hold enough cars that were saved by your hands.
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>Made with love · Ozzie · 11 September 2026</p>
+  </footer>
+</div>
+
+<script>
+// ── STARS ──────────────────────────────────────────────
+(function generateStars() {
+  const field = document.getElementById('starField');
+  const count = window.innerWidth < 600 ? 80 : 160;
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.2 + 0.4;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --d:${(Math.random()*4+1.5).toFixed(1)}s;
+      --lo:${(Math.random()*0.2+0.05).toFixed(2)};
+      --hi:${(Math.random()*0.6+0.3).toFixed(2)};
+      animation-delay:${(Math.random()*5).toFixed(2)}s;
+    `;
+    field.appendChild(s);
+  }
+})();
+
+// ── SNOW ──────────────────────────────────────────────
+const canvas = document.getElementById('snowCanvas');
+const ctx = canvas.getContext('2d');
+let flakes = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function createFlake() {
+  return {
+    x: Math.random() * canvas.width,
+    y: -8,
+    r: Math.random() * 2.5 + 0.8,
+    speed: Math.random() * 0.8 + 0.3,
+    drift: (Math.random() - 0.5) * 0.4,
+    opacity: Math.random() * 0.5 + 0.15
+  };
+}
+
+function snowLoop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (Math.random() < 0.25) flakes.push(createFlake());
+  flakes = flakes.filter(f => f.y < canvas.height + 10);
+  flakes.forEach(f => {
+    f.y += f.speed;
+    f.x += f.drift;
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(240,234,214,${f.opacity})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(snowLoop);
+}
+snowLoop();
+
+// ── SONGS ──────────────────────────────────────────────
+const songs = [
+  { file: "Kwesta - Vur Vai (Official Music Video) [05JnKcu73h0].mp3",      name: "Kwesta — Vur Vai" },
+  { file: "Kwesta - Ngud' (Official Music Video) ft. Cassper Nyovest [WPU5dMC4y-M].mp3", name: "Kwesta — Ngud' ft. Cassper Nyovest" },
+  { file: "Kwesta - Spirit (Official Music Video) ft Wale ft. Wale [wFi-BqmTRrw].mp3",   name: "Kwesta — Spirit ft. Wale" },
+  { file: "Voices of Fire - JOY (Unspeakable) (Official Audio) ft. Pharrell Williams [pWxDU0y5Awk].mp3", name: "Voices of Fire — JOY ft. Pharrell" },
+  { file: "uthando lwami-Rebbeca Malope [30LxgPKgy2s].mp3",          name: "Rebecca Malope — Uthando Lwami" },
+  { file: "Rebecca Malope S'thembele kuwe [zdMbWygUV9Q].mp3",         name: "Rebecca Malope — S'thembele Kuwe" },
+  { file: "Rebecca Malope- Ngibemuhle Nam [OVE48AsL-aE].mp3",         name: "Rebecca Malope — Ngibemuhle Nam" },
+  { file: "ZCC Female Choir - Hale Mpotsa Tshepo yaka [czvDpG9INtU].mp3", name: "ZCC Female Choir — Hale Mpotsa Tshepo Yaka" },
+  { file: "ZCC Female Choir - Khotso [Ot7Imsi9KcE].mp3",              name: "ZCC Female Choir — Khotso" },
+  { file: "ZCC Female Choir - Dinokeng tsa Babylon [Q-reCkponLk].mp3", name: "ZCC Female Choir — Dinokeng tsa Babylon" },
+  { file: "ZCC Female Choir - Iyalela Ngosi Jesu [EuTEZJJqYII].mp3",  name: "ZCC Female Choir — Iyalela Ngosi Jesu" },
+  { file: "Luther Vandross - Endless Love (Official HD Video) [nScV1qu-MZQ].mp3", name: "Luther Vandross — Endless Love" },
+  { file: "Aretha Franklin - (You Make Me Feel Like) A Natural Woman (Live at Kennedy Center Honors) [qz2efshhuq4].mp3", name: "Aretha Franklin — A Natural Woman" },
+  { file: "Marvin Gaye - What's Going On [H-kA3UtBj4M].mp3",          name: "Marvin Gaye — What's Going On" },
+  { file: "Stevie Wonder - I Wish (the original version) [hKYKa-PNT0].mp3", name: "Stevie Wonder — I Wish" },
+  { file: "Uguluv'omnyama [m3j5mPjmQgg] (1).mp3",                     name: "Uguluv'omnyama" },
+  { file: "Uguluv'omnyama [m3j5mPjmQgg].mp3",                         name: "Uguluv'omnyama (Alt)" },
+  { file: "Rex Rabanye - O Nketsang [FP7I45xdQ0Q].mp3",               name: "Rex Rabanye — O Nketsang" },
+  { file: "Abdullah Ibrahim - Mannenberg [hiQ0uyqySBg].mp3",           name: "Abdullah Ibrahim — Mannenberg" },
+  { file: "Stimela (The Coal Train) [IXY2TgDdcQ8].mp3",               name: "Stimela — The Coal Train" },
+  { file: "Sipho 'Hotstix' Mabuse - Burn Out (Official Music Video) [zLflcXk0ec0].mp3", name: "Sipho Mabuse — Burn Out" },
+  { file: "Sister Bethina [NLWWMzt8fNI].mp3",                          name: "Sister Bethina" },
+  { file: "Mandoza - Nkalakatha (Official Music Video) [b28vJvntyUM].mp3", name: "Mandoza — Nkalakatha" },
+];
+
+const player = document.getElementById('player');
+const vinyl  = document.getElementById('vinyl');
+const nowPlaying = document.getElementById('now-playing');
+const trackName  = document.getElementById('trackName');
+let currentSong = null;
+let revealed = false;
+
+function pickRandom() {
+  let idx;
+  do { idx = Math.floor(Math.random() * songs.length); } while (idx === currentSong);
+  return idx;
+}
+
+function playSong(idx) {
+  const song = songs[idx];
+  currentSong = idx;
+  player.src = `audio/${song.file}`;
+  player.volume = 0;
+  player.play().catch(() => {});
+  // Fade in
+  let vol = 0;
+  const fade = setInterval(() => {
+    vol = Math.min(vol + 0.04, 1);
+    player.volume = vol;
+    if (vol >= 1) clearInterval(fade);
+  }, 80);
+  trackName.textContent = song.name;
+  vinyl.classList.add('playing');
+  nowPlaying.classList.remove('hidden', 'paused');
+}
+
+player.addEventListener('ended', () => {
+  playSong(pickRandom());
+});
+
+// ── RECORD TOGGLE ──────────────────────────────────────
+const recordBtn  = document.getElementById('recordBtn');
+const mainContent = document.getElementById('mainContent');
+
+function revealContent() {
+  revealed = true;
+  mainContent.style.opacity = '1';
+  mainContent.style.maxHeight = '9999px';
+  mainContent.style.overflow = 'visible';
+  // Start random song
+  playSong(pickRandom());
+}
+
+function collapseContent() {
+  revealed = false;
+  mainContent.style.opacity = '0';
+  mainContent.style.maxHeight = '0';
+  mainContent.style.overflow = 'hidden';
+  vinyl.classList.remove('playing');
+  nowPlaying.classList.add('hidden');
+  // Fade out audio
+  let vol = player.volume;
+  const fade = setInterval(() => {
+    vol = Math.max(vol - 0.05, 0);
+    player.volume = vol;
+    if (vol <= 0) { clearInterval(fade); player.pause(); }
+  }, 60);
+}
+
+recordBtn.addEventListener('click', () => {
+  if (!revealed) revealContent();
+  else collapseContent();
+});
+recordBtn.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); recordBtn.click(); }
+});
+
+// ── VIEW TABS ──────────────────────────────────────────
+document.querySelectorAll('.view-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('view-' + tab.dataset.view).classList.add('active');
+  });
+});
+
+// ── LOADER ─────────────────────────────────────────────
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('gone');
+  }, 2200);
+});
+</script>
+</body>
+</html>
